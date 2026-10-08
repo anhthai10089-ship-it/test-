@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang web tích điểm cho em nắm</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito', sans-serif; }
+        @keyframes popupBounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-popup { animation: popupBounce 0.3s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 min-h-screen text-gray-800">
+
+    <!-- MÀN HÌNH CHÀO MỪNG ĐẦU TRANG -->
+    <div id="welcomeScreen" class="fixed inset-0 bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-600 z-[200] flex items-center justify-center p-4">
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl text-center animate-popup border-4 border-pink-200">
+            <div class="bg-pink-100 text-pink-500 w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 text-3xl sm:text-4xl shadow-inner">
+                <i class="fa-solid fa-hand-holding-heart animate-bounce"></i>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-gray-800 mb-2">Chào mừng em Nấm! 🌸</h2>
+            <p class="text-xs sm:text-sm font-semibold text-gray-600 mb-6 leading-relaxed">
+                Chúc em một ngày tràn đầy năng lượng, hoàn thành xuất sắc các nhiệm vụ và nhận thật nhiều điểm thưởng yêu thương nhé! ✨
+            </p>
+            <button onclick="enterMainSite()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-extrabold py-3.5 rounded-2xl transition shadow-lg shadow-pink-200 text-sm sm:text-base flex items-center justify-center space-x-2">
+                <span>Cảm ơn</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center space-x-2.5">
+                    <div class="bg-pink-500 text-white p-2 rounded-xl sm:rounded-2xl shadow-lg shadow-pink-200">
+                        <i class="fa-solid fa-star text-xl sm:text-2xl animate-spin" style="animation-duration: 6s;"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-extrabold text-gray-800 tracking-wide">Tích Điểm Cho Em Nấm 🌸</h1>
+                        <p class="text-[11px] sm:text-xs text-gray-500">Hoàn thành việc nhà - Nhận quà xinh yêu</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chuyển đổi chế độ & Thống kê nhỏ -->
+            <div class="flex items-center justify-between sm:justify-end space-x-2 w-full sm:w-auto">
+                <div class="bg-amber-100 text-amber-800 px-2.5 py-1.5 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-1 shadow-sm">
+                    <i class="fa-solid fa-coins text-amber-500"></i>
+                    <span><span id="headerTotalPoints">0</span>/<span id="headerMaxPoints">1000</span>đ</span>
+                </div>
+
+                <button onclick="toggleAdminMode()" id="modeBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-md shadow-indigo-200 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span id="modeText">Chế độ: Em Nấm</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+
+        <!-- LỜI NHẮN NHỦ TRONG TRANG TÍCH ĐIỂM -->
+        <section class="mb-5 sm:mb-6">
+            <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-md flex items-center space-x-3">
+                <div class="bg-white/20 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl text-lg sm:text-xl backdrop-blur-sm flex-shrink-0">
+                    <i class="fa-solid fa-heart animate-pulse text-pink-200"></i>
+                </div>
+                <div>
+                    <p class="text-xs sm:text-sm font-bold tracking-wide">Nhắn nhủ yêu thương: Chúc em sẽ tốt hơn ngày hôm qua em nhé! 💕</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD TỔNG QUAN -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <!-- Điểm tích lũy -->
+            <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-pink-100 flex items-center space-x-4">
+                <div class="p-3 sm:p-4 bg-pink-100 text-pink-600 rounded-xl sm:rounded-2xl text-xl sm:text-2xl flex-shrink-0">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <div>
+                    <p class="text-[11px] sm:text-xs text-gray-400 uppercase font-bold tracking-wider">Tổng điểm tháng này</p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-gray-800"><span id="statPoints">0</span> <span class="text-xs sm:text-sm font-semibold text-gray-400">điểm</span></h3>
+                    <p class="text-[11px] sm:text-xs text-pink-500 font-semibold mt-0.5">Tối đa: 1000 điểm/tháng</p>
+                </div>
+            </div>
+
+            <!-- Nhiệm vụ hoàn thành -->
+            <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-blue-100 flex items-center space-x-4">
+                <div class="p-3 sm:p-4 bg-blue-100 text-blue-600 rounded-xl sm:rounded-2xl text-xl sm:text-2xl flex-shrink-0">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <p class="text-[11px] sm:text-xs text-gray-400 uppercase font-bold tracking-wider">Đã hoàn thành</p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-gray-800"><span id="statCompletedCount">0</span> <span class="text-xs sm:text-sm font-semibold text-gray-400">nhiệm vụ</span></h3>
+                    <p class="text-[11px] sm:text-xs text-blue-500 font-semibold mt-0.5">Đã được Quản lý duyệt</p>
+                </div>
+            </div>
+
+            <!-- Thanh tiến độ tháng -->
+            <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm border border-purple-100 flex flex-col justify-center">
+                <div class="flex justify-between items-center mb-1.5 sm:mb-2">
+                    <span class="text-[11px] sm:text-xs text-gray-400 uppercase font-bold tracking-wider">Tiến độ hạn mức tháng</span>
+                    <span id="progressPercent" class="text-xs font-bold text-purple-600">0%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-3 sm:h-3.5 overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-3 sm:h-3.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-[11px] sm:text-xs text-gray-400 mt-1.5 sm:mt-2 text-right">Cố lên em Nấm nhé! ✨</p>
+            </div>
+        </section>
+
+        <!-- KHU VỰC DÀNH CHO QUẢN LÝ (ẨN KHI Ở CHẾ ĐỘ EM NẤM) -->
+        <div id="adminSection" class="hidden bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-md border-2 border-indigo-200 mb-6 sm:mb-8 transition-all">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 pb-3 border-b border-gray-100 gap-2">
+                <div class="flex items-center space-x-2.5">
+                    <div class="bg-indigo-600 text-white p-2 rounded-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h2 class="text-base sm:text-lg font-black text-indigo-900">Bảng Quản Lý Nhiệm Vụ & Phê Duyệt</h2>
+                </div>
+                <button onclick="openPasswordModal()" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg font-bold transition">
+                    <i class="fa-solid fa-key mr-1"></i> Đổi mật khẩu quản lý
+                </button>
+            </div>
+
+            <!-- Form Thêm / Sửa Nhiệm Vụ -->
+            <div class="bg-indigo-50/50 p-3.5 sm:p-4 rounded-2xl mb-6">
+                <h3 id="formTitle" class="text-xs sm:text-sm font-bold text-indigo-800 mb-3"><i class="fa-solid fa-plus-circle mr-1"></i> Thêm nhiệm vụ mới cho Em Nấm</h3>
+                <form id="taskForm" onsubmit="handleSaveTask(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                    <input type="hidden" id="editTaskId">
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Tên nhiệm vụ</label>
+                        <input type="text" id="taskName" required placeholder="VD: Ăn uống sớm và đúng giờ" class="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Danh mục</label>
+                        <select id="taskCategory" class="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Sinh hoạt">Sinh hoạt</option>
+                            <option value="Học tập">Học tập</option>
+                            <option value="Sức khỏe">Sức khỏe</option>
+                            <option value="Việc nhà">Việc nhà</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Điểm thưởng</label>
+                        <input type="number" id="taskPointsInput" required value="5" min="1" class="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Giờ</label>
+                        <input type="number" id="taskHours" required value="0" min="0" class="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">Phút</label>
+                        <input type="number" id="taskMinutes" required value="5" min="0" max="59" class="w-full px-3 py-2 text-sm bg-white border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="flex items-end space-x-1 pt-1 sm:pt-0">
+                        <button type="submit" id="submitTaskBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-2 rounded-xl transition shadow">
+                            Thêm NV
+                        </button>
+                        <button type="button" id="cancelEditBtn" onclick="resetTaskForm()" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-700 text-xs font-bold py-2.5 px-2 rounded-xl transition">
+                            Hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Danh sách báo cáo chờ duyệt -->
+            <div class="mb-6">
+                <h3 class="text-xs sm:text-sm font-bold text-gray-700 mb-3"><i class="fa-solid fa-clipboard-check mr-1 text-indigo-600"></i> Báo cáo từ Em Nấm đang chờ duyệt</h3>
+                <div id="pendingReportsContainer" class="space-y-3">
+                    <!-- Javascript render các báo cáo chờ duyệt vào đây -->
+                </div>
+            </div>
+
+            <!-- Lịch sử nhiệm vụ đã duyệt thành công -->
+            <div>
+                <h3 class="text-xs sm:text-sm font-bold text-emerald-800 mb-3"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Lịch sử nhiệm vụ đã duyệt thành công</h3>
+                <div id="approvedHistoryContainer" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                    <!-- Javascript render lịch sử đã duyệt vào đây -->
+                </div>
+            </div>
+        </div>
+
+        <!-- KHU VỰC NHIỆM VỤ CHÍNH CHO EM NẤM -->
+        <section>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-3">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-gray-800">Danh Sách Nhiệm Vụ Hằng Ngày</h2>
+                    <p class="text-xs text-gray-500">Hoàn thành trước khi hết giờ, chụp ảnh minh chứng để được Quản lý cộng điểm nhé! (Quá hạn tự xóa bị trừ 15đ)</p>
+                </div>
+                <div class="flex space-x-1.5 sm:space-x-2 overflow-x-auto w-full sm:w-auto pb-1.5 sm:pb-0 scrollbar-none">
+                    <button onclick="filterTasks('Tất cả')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-pink-500 text-white shadow-sm flex-shrink-0">Tất cả</button>
+                    <button onclick="filterTasks('Sinh hoạt')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 flex-shrink-0">Sinh hoạt</button>
+                    <button onclick="filterTasks('Học tập')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 flex-shrink-0">Học tập</button>
+                    <button onclick="filterTasks('Sức khỏe')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 flex-shrink-0">Sức khỏe</button>
+                    <button onclick="filterTasks('Việc nhà')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 flex-shrink-0">Việc nhà</button>
+                </div>
+            </div>
+
+            <!-- Grid danh sách nhiệm vụ -->
+            <div id="taskListContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Javascript render nhiệm vụ vào đây -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL POPUP THÔNG BÁO GIỮA MÀN HÌNH -->
+    <div id="centerAlertModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center animate-popup border-4 border-red-200">
+            <div id="alertIconDiv" class="bg-red-100 text-red-500 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="alertTitle" class="text-xl font-black text-red-600 mb-1">BỊ TRỪ ĐIỂM!</h3>
+            <p id="alertMessage" class="text-sm font-semibold text-gray-600 mb-5">Nội dung thông báo...</p>
+            <button onclick="closeCenterAlert()" class="w-full bg-red-500 hover:bg-red-600 text-white font-extrabold py-3 rounded-2xl transition shadow-lg shadow-red-200">
+                Đã hiểu 😿
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL NỘP BÁO CÁO KÈM ẢNH MINH CHỨNG -->
+    <div id="reportModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-base sm:text-lg font-black text-gray-800"><i class="fa-solid fa-camera text-pink-500 mr-2"></i> Báo cáo hoàn thành nhiệm vụ</h3>
+                <button onclick="closeReportModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="mb-4 bg-pink-50 p-3 rounded-2xl">
+                <p id="modalTaskName" class="text-sm font-bold text-pink-900"></p>
+                <p id="modalTaskPointsText" class="text-xs text-pink-600 mt-0.5">Thưởng: <strong>5 điểm</strong> sau khi Quản lý duyệt.</p>
+            </div>
+            <input type="hidden" id="reportTaskId">
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-600 mb-2">Tải lên hình ảnh minh chứng (Bắt buộc) 📸</label>
+                <input type="file" id="reportImageFile" accept="image/*" class="w-full text-xs sm:text-sm text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 cursor-pointer border border-gray-200 rounded-xl p-2">
+            </div>
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-gray-600 mb-1">Ghi chú thêm cho quản lý (nếu có)</label>
+                <textarea id="reportNote" rows="2" placeholder="VD: Con đã hoàn thành ạ..." class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="closeReportModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl transition text-sm">Hủy</button>
+                <button onclick="submitReport()" class="flex-1 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl transition shadow-lg shadow-pink-200 text-sm">Gửi báo cáo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG NHẬP QUẢN LÝ -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl">
+            <div class="text-center mb-4">
+                <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-lg font-black text-gray-800">Xác thực Quản lý</h3>
+                <p class="text-xs text-gray-500 mt-1">Nhập mật khẩu để vào chế độ quản lý nhiệm vụ</p>
+            </div>
+            <div class="mb-4">
+                <input type="password" id="adminPasswordInput" placeholder="Mật khẩu (mặc định: 123456)" class="w-full px-4 py-2.5 text-sm border border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-center tracking-widest">
+                <p id="loginError" class="text-xs text-red-500 font-bold text-center mt-2 hidden">Mật khẩu không đúng!</p>
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="closeAdminLoginModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-xl transition text-sm">Hủy</button>
+                <button onclick="verifyAdminPassword()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl transition text-sm shadow-md shadow-indigo-200">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐỔI MẬT KHẨU -->
+    <div id="passwordModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-black text-gray-800 mb-3"><i class="fa-solid fa-key text-indigo-600 mr-2"></i> Đổi mật khẩu Quản lý</h3>
+            <div class="mb-3">
+                <label class="block text-xs font-bold text-gray-600 mb-1">Mật khẩu mới</label>
+                <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới..." class="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div class="flex space-x-3 mt-4">
+                <button onclick="closePasswordModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-xl transition text-sm">Hủy</button>
+                <button onclick="saveNewPassword()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl transition text-sm">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM ẢNH PHÓNG TO -->
+    <div id="imagePreviewModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4" onclick="closeImageModal()">
+        <div class="relative max-w-3xl w-full">
+            <button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white text-2xl hover:text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+            <img id="previewModalImg" src="" alt="Minh chứng" class="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl">
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Dữ liệu mặc định ban đầu
+        const DEFAULT_TASKS = [
+            { id: 1, name: "Ăn uống sớm và đúng giờ", category: "Sinh hoạt", timeLeft: 300, points: 5 },
+            { id: 2, name: "Ngủ sớm trước 10 giờ đêm", category: "Sức khỏe", timeLeft: 3600, points: 5 },
+            { id: 3, name: "Uống đủ nước lọc trong ngày", category: "Sức khỏe", timeLeft: 7200, points: 5 },
+            { id: 4, name: "Tắm rửa sớm sạch sẽ", category: "Sinh hoạt", timeLeft: 1800, points: 5 },
+            { id: 5, name: "Học bài và làm bài tập về nhà", category: "Học tập", timeLeft: 5400, points: 5 },
+            { id: 6, name: "Đọc sách phát triển tư duy", category: "Học tập", timeLeft: 1200, points: 5 }
+        ];
+
+        // --- HÀM ẨN MÀN HÌNH CHÀO MỪNG KHI BẤM "CẢM ƠN" ---
+        function enterMainSite() {
+            let welcomeEl = document.getElementById('welcomeScreen');
+            welcomeEl.style.opacity = '0';
+            welcomeEl.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => {
+                welcomeEl.classList.add('hidden');
+            }, 400);
+        }
+
+        // --- KIỂM TRA CHUYỂN THÁNG MỚI ĐỂ RESET ĐIỂM ---
+        function checkAndResetMonthlyPoints() {
+            let now = new Date();
+            let currentMonthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
+            let savedMonthKey = localStorage.getItem('nam_current_month');
+
+            if (!savedMonthKey) {
+                localStorage.setItem('nam_current_month', currentMonthKey);
+            } else if (savedMonthKey !== currentMonthKey) {
+                localStorage.setItem('nam_points', JSON.stringify(0));
+                localStorage.setItem('nam_completed_count', JSON.stringify(0));
+                localStorage.setItem('nam_reports', JSON.stringify([]));
+                localStorage.setItem('nam_current_month', currentMonthKey);
+            }
+        }
+
+        checkAndResetMonthlyPoints();
+
+        // Khởi tạo LocalStorage nếu chưa có
+        if (!localStorage.getItem('nam_tasks')) {
+            localStorage.setItem('nam_tasks', JSON.stringify(DEFAULT_TASKS));
+        }
+        if (!localStorage.getItem('nam_reports')) {
+            localStorage.setItem('nam_reports', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('nam_points')) {
+            localStorage.setItem('nam_points', JSON.stringify(0));
+        }
+        if (!localStorage.getItem('nam_completed_count')) {
+            localStorage.setItem('nam_completed_count', JSON.stringify(0));
+        }
+        if (!localStorage.getItem('nam_admin_pass')) {
+            localStorage.setItem('nam_admin_pass', '123456');
+        }
+
+        let isAdminMode = false;
+        let currentFilter = 'Tất cả';
+
+        // Load dữ liệu khi mở trang và chạy đồng hồ đếm ngược mỗi giây
+        document.addEventListener('DOMContentLoaded', () => {
+            let now = new Date();
+            let monthNames = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+            let currentMonthStr = monthNames[now.getMonth()];
+            document.getElementById('currentMonthLabel').innerText = currentMonthStr;
+
+            renderDashboard();
+            renderTasks();
+            renderPendingReports();
+            renderApprovedHistory();
+            setInterval(updateCountdowns, 1000);
+
+            // Kiểm tra thông báo lúc 23:00 tối
+            checkNightlySummary();
+            setInterval(checkNightlySummary, 60000);
+        });
+
+        // --- HÀM THÔNG BÁO LÚC 23:00 TỐI ---
+        function checkNightlySummary() {
+            let now = new Date();
+            let currentHour = now.getHours();
+            let currentMinute = now.getMinutes();
+            let todayDateStr = now.toDateString();
+            let lastNotifiedDate = localStorage.getItem('nam_last_notified_date');
+
+            if (currentHour === 23 && currentMinute < 5 && lastNotifiedDate !== todayDateStr) {
+                localStorage.setItem('nam_last_notified_date', todayDateStr);
+                showCustomAlert("TỔNG KẾT CUỐI NGÀY 🌙", "Hôm nay bạn không bị trừ điểm và không bị bỏ qua nhiệm vụ! Tuyệt vời lắm em Nấm ơi! 🌸");
+            }
+        }
+
+        function showCustomAlert(title, message) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = message;
+            
+            let modalBox = document.getElementById('centerAlertModal').querySelector('div');
+            modalBox.className = "bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center animate-popup border-4 border-emerald-200";
+            
+            let iconDiv = document.getElementById('alertIconDiv');
+            iconDiv.className = "bg-emerald-100 text-emerald-600 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner";
+            iconDiv.innerHTML = '<i class="fa-solid fa-face-smile-beam"></i>';
+
+            document.getElementById('centerAlertModal').classList.remove('hidden');
+        }
+
+        // --- HÀM HIỂN THỊ POPUP THÔNG BÁO GIỮA MÀN HÌNH CHUNG ---
+        function showCenterAlert(title, message) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = message;
+            
+            let modalBox = document.getElementById('centerAlertModal').querySelector('div');
+            modalBox.className = "bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl text-center animate-popup border-4 border-red-200";
+            
+            let iconDiv = document.getElementById('alertIconDiv');
+            iconDiv.className = "bg-red-100 text-red-500 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner";
+            iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+            document.getElementById('centerAlertModal').classList.remove('hidden');
+        }
+
+        function closeCenterAlert() {
+            document.getElementById('centerAlertModal').classList.add('hidden');
+        }
+
+        // --- DASHBOARD & STATS ---
+        function renderDashboard() {
+            let points = parseInt(localStorage.getItem('nam_points')) || 0;
+            let completedCount = parseInt(localStorage.getItem('nam_completed_count')) || 0;
+            let maxPoints = 1000;
+
+            let pointsEl = document.getElementById('statPoints');
+            pointsEl.innerText = points;
+            if (points < 0) {
+                pointsEl.className = "text-2xl sm:text-3xl font-black text-red-600";
+            } else {
+                pointsEl.className = "text-2xl sm:text-3xl font-black text-gray-800";
+            }
+
+            document.getElementById('headerTotalPoints').innerText = points;
+            document.getElementById('statCompletedCount').innerText = completedCount;
+
+            let positivePoints = Math.max(points, 0);
+            let percent = Math.min(Math.round((positivePoints / maxPoints) * 100), 100);
+            document.getElementById('progressPercent').innerText = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // --- ĐỒNG HỒ ĐẾM NGƯỢC & TỰ ĐỘNG XÓA KHI VỀ 0 ---
+        function updateCountdowns() {
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+            let updated = false;
+
+            tasks.forEach(task => {
+                if (task.timeLeft > 0) {
+                    task.timeLeft -= 1;
+                    updated = true;
+                    let timerEl = document.getElementById(`timer-${task.id}`);
+                    if (timerEl) {
+                        timerEl.innerText = formatTime(task.timeLeft);
+                    }
+                } else if (task.timeLeft === 0) {
+                    task.timeLeft = -1;
+                    updated = true;
+                    handleTaskExpired(task.id, task.name);
+                }
+            });
+
+            if (updated) {
+                localStorage.setItem('nam_tasks', JSON.stringify(tasks));
+            }
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 0) return "00:00:00";
+            let hours = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds % 3600) / 60);
+            let secs = seconds % 60;
+
+            if (hours > 0) {
+                return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function handleTaskExpired(taskId, taskName) {
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+            let index = tasks.findIndex(t => t.id === taskId);
+            if (index !== -1) {
+                tasks.splice(index, 1);
+                localStorage.setItem('nam_tasks', JSON.stringify(tasks));
+
+                let points = (parseInt(localStorage.getItem('nam_points')) || 0) - 15;
+                localStorage.setItem('nam_points', JSON.stringify(points));
+
+                renderDashboard();
+                renderTasks();
+                showCenterAlert("HẾT GIỜ - BỊ TRỪ 15 ĐIỂM!", `Nhiệm vụ "${taskName}" đã hết thời gian và tự động xóa. Em Nấm bị phạt trừ 15 điểm.`);
+            }
+        }
+
+        // --- RENDER DANH SÁCH NHIỆM VỤ ---
+        function renderTasks() {
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+            let container = document.getElementById('taskListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let filteredTasks = currentFilter === 'Tất cả' ? tasks : tasks.filter(t => t.category === currentFilter);
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400 font-semibold text-sm">Không có nhiệm vụ nào trong danh mục này.</div>`;
+                return;
+            }
+
+            filteredTasks.forEach(task => {
+                let card = document.createElement('div');
+                card.className = "bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition relative group";
+                
+                let categoryColor = {
+                    'Sinh hoạt': 'bg-pink-100 text-pink-700',
+                    'Học tập': 'bg-blue-100 text-blue-700',
+                    'Sức khỏe': 'bg-emerald-100 text-emerald-700',
+                    'Việc nhà': 'bg-amber-100 text-amber-750'
+                }[task.category] || 'bg-gray-100 text-gray-700';
+
+                let displayTime = task.timeLeft > 0 ? task.timeLeft : 0;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2.5">
+                            <span class="text-[11px] font-bold px-2.5 py-1 rounded-full ${categoryColor}">${task.category}</span>
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-xl flex items-center space-x-1">
+                                <i class="fa-solid fa-star"></i><span>+${task.points} điểm</span>
+                            </span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-gray-800 mb-2">${task.name}</h3>
+                        <p class="text-xs text-red-500 font-bold flex items-center mb-4 bg-red-50 px-3 py-1.5 rounded-xl">
+                            <i class="fa-solid fa-stopwatch mr-1.5"></i> Còn lại: <span id="timer-${task.id}" class="ml-1 text-xs sm:text-sm font-black">${formatTime(displayTime)}</span>
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-50 flex items-center justify-between">
+                        <button onclick="openReportModal(${task.id}, '${task.name.replace(/'/g, "\\'")}', ${task.points})" class="w-full bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-sm shadow-pink-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-camera"></i>
+                            <span>Báo cáo & Nộp ảnh</span>
+                        </button>
+                        ${isAdminMode ? `
+                            <div class="flex space-x-1 ml-2">
+                                <button onclick="editTask(${task.id})" class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-xl text-xs" title="Sửa"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteTask(${task.id})" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl text-xs" title="Xóa"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterTasks(category) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.innerText.includes(category)) {
+                    btn.className = "filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-pink-500 text-white shadow-sm flex-shrink-0";
+                } else {
+                    btn.className = "filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 flex-shrink-0";
+                }
+            });
+            renderTasks();
+        }
+
+        // --- HỆ THỐNG BÁO CÁO & DUYỆT ẢNH ---
+        function openReportModal(taskId, taskName, points) {
+            document.getElementById('reportTaskId').value = taskId;
+            document.getElementById('modalTaskName').innerText = taskName;
+            document.getElementById('modalTaskPointsText').innerHTML = `Thưởng: <strong>${points} điểm</strong> sau khi Quản lý duyệt.`;
+            document.getElementById('reportImageFile').value = '';
+            document.getElementById('reportNote').value = '';
+            document.getElementById('reportModal').classList.remove('hidden');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+
+        function submitReport() {
+            let taskId = document.getElementById('reportTaskId').value;
+            let fileInput = document.getElementById('reportImageFile');
+            let note = document.getElementById('reportNote').value;
+
+            if (fileInput.files.length === 0) {
+                alert('Em Nấm bắt buộc phải tải lên hình ảnh minh chứng mới được gửi báo cáo nhé!');
+                return;
+            }
+
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+            let task = tasks.find(t => t.id == taskId);
+            if (!task) {
+                alert('Nhiệm vụ không còn tồn tại hoặc đã hết hạn!');
+                closeReportModal();
+                return;
+            }
+
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let imgDataUrl = e.target.result;
+                let reports = JSON.parse(localStorage.getItem('nam_reports')) || [];
+
+                let newReport = {
+                    id: Date.now(),
+                    taskId: taskId,
+                    taskName: task.name,
+                    points: task.points,
+                    image: imgDataUrl,
+                    note: note,
+                    time: new Date().toLocaleString('vi-VN'),
+                    status: 'pending'
+                };
+
+                reports.unshift(newReport);
+                localStorage.setItem('nam_reports', JSON.stringify(reports));
+
+                tasks = tasks.filter(t => t.id != taskId);
+                localStorage.setItem('nam_tasks', JSON.stringify(tasks));
+
+                closeReportModal();
+                alert('Gửi báo cáo thành công! Đang chờ Quản lý duyệt điểm nhé! ✨');
+                renderTasks();
+                renderPendingReports();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderPendingReports() {
+            let container = document.getElementById('pendingReportsContainer');
+            if (!container) return;
+            let reports = JSON.parse(localStorage.getItem('nam_reports')) || [];
+            let pending = reports.filter(r => r.status === 'pending');
+
+            if (pending.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 italic">Không có báo cáo nào đang chờ duyệt.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            pending.forEach(rep => {
+                let div = document.createElement('div');
+                div.className = "bg-white p-3 rounded-2xl border border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <img src="${rep.image}" alt="Minh chứng" class="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-xl cursor-pointer border border-gray-200 flex-shrink-0" onclick="previewImage('${rep.image}')" title="Bấm để phóng to">
+                        <div>
+                            <h4 class="text-xs font-black text-gray-800">${rep.taskName} <span class="text-amber-600">(+${rep.points || 5}đ)</span></h4>
+                            <p class="text-[11px] text-gray-500 mt-0.5">Ghi chú: ${rep.note || 'Không có'}</p>
+                            <span class="text-[10px] text-gray-400 block mt-0.5">${rep.time}</span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2 w-full sm:w-auto justify-end">
+                        <button onclick="approveReport(${rep.id})" class="flex-1 sm:flex-none bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-check"></i><span>Duyệt (+${rep.points || 5}đ)</span>
+                        </button>
+                        <button onclick="rejectReport(${rep.id})" class="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-xmark"></i><span>Từ chối (-10đ)</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- RENDER LỊCH SỬ ĐÃ DUYỆT ---
+        function renderApprovedHistory() {
+            let container = document.getElementById('approvedHistoryContainer');
+            if (!container) return;
+            let reports = JSON.parse(localStorage.getItem('nam_reports')) || [];
+            let approved = reports.filter(r => r.status === 'approved');
+
+            if (approved.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 italic">Chưa có nhiệm vụ nào được duyệt thành công trong tháng này.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            approved.forEach(rep => {
+                let div = document.createElement('div');
+                div.className = "bg-emerald-50/40 p-3 rounded-2xl border border-emerald-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 shadow-sm";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <img src="${rep.image}" alt="Minh chứng" class="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-xl cursor-pointer border border-emerald-200 flex-shrink-0" onclick="previewImage('${rep.image}')" title="Bấm để phóng to">
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h4 class="text-xs font-black text-gray-800">${rep.taskName}</h4>
+                                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">+${rep.points || 5} điểm</span>
+                            </div>
+                            <p class="text-[11px] text-gray-600 mt-0.5">Ghi chú: ${rep.note || 'Không có'}</p>
+                            <span class="text-[10px] text-emerald-600 block mt-0.5"><i class="fa-regular fa-clock mr-1"></i>${rep.time}</span>
+                        </div>
+                    </div>
+                    <div class="text-[11px] font-bold text-emerald-600 bg-white px-2.5 py-1 rounded-xl border border-emerald-100 shadow-sm flex items-center space-x-1 self-end sm:self-center">
+                        <i class="fa-solid fa-circle-check"></i><span>Hoàn thành</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function previewImage(url) {
+            document.getElementById('previewModalImg').src = url;
+            document.getElementById('imagePreviewModal').classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imagePreviewModal').classList.add('hidden');
+        }
+
+        function approveReport(reportId) {
+            let reports = JSON.parse(localStorage.getItem('nam_reports')) || [];
+            let repIndex = reports.findIndex(r => r.id === reportId);
+            if (repIndex !== -1) {
+                let rewardPoints = reports[repIndex].points || 5;
+                reports[repIndex].status = 'approved';
+                localStorage.setItem('nam_reports', JSON.stringify(reports));
+
+                let points = (parseInt(localStorage.getItem('nam_points')) || 0) + rewardPoints;
+                if (points > 1000) points = 1000;
+                localStorage.setItem('nam_points', JSON.stringify(points));
+
+                let completedCount = (parseInt(localStorage.getItem('nam_completed_count')) || 0) + 1;
+                localStorage.setItem('nam_completed_count', JSON.stringify(completedCount));
+
+                renderDashboard();
+                renderPendingReports();
+                renderApprovedHistory();
+                alert(`Đã duyệt thành công và cộng ${rewardPoints} điểm cho Em Nấm! 🎉`);
+            }
+        }
+
+        function rejectReport(reportId) {
+            let reports = JSON.parse(localStorage.getItem('nam_reports')) || [];
+            let repIndex = reports.findIndex(r => r.id === reportId);
+            if (repIndex !== -1) {
+                reports[repIndex].status = 'rejected';
+                localStorage.setItem('nam_reports', JSON.stringify(reports));
+
+                let points = (parseInt(localStorage.getItem('nam_points')) || 0) - 10;
+                localStorage.setItem('nam_points', JSON.stringify(points));
+
+                renderDashboard();
+                renderPendingReports();
+                renderApprovedHistory();
+                showCenterAlert("BÁO CÁO BỊ TỪ CHỐI!", `Quản lý đã từ chối báo cáo nhiệm vụ "${reports[repIndex].taskName}". Em Nấm bị trừ 10 điểm!`);
+            }
+        }
+
+        // --- QUẢN LÝ THÊM/SỬA/XÓA NHIỆM VỤ (CHỈ ADMIN) ---
+        function handleSaveTask(e) {
+            e.preventDefault();
+            let editId = document.getElementById('editTaskId').value;
+            let name = document.getElementById('taskName').value;
+            let category = document.getElementById('taskCategory').value;
+            let taskPoints = parseInt(document.getElementById('taskPointsInput').value) || 5;
+            
+            let hours = parseInt(document.getElementById('taskHours').value) || 0;
+            let minutes = parseInt(document.getElementById('taskMinutes').value) || 0;
+            let totalSeconds = (hours * 3600) + (minutes * 60);
+
+            if (totalSeconds <= 0) {
+                alert('Vui lòng chọn thời gian lớn hơn 0!');
+                return;
+            }
+
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+
+            if (editId) {
+                let index = tasks.findIndex(t => t.id == editId);
+                if (index !== -1) {
+                    tasks[index].name = name;
+                    tasks[index].category = category;
+                    tasks[index].points = taskPoints;
+                    tasks[index].timeLeft = totalSeconds;
+                }
+                alert('Đã cập nhật nhiệm vụ thành công!');
+            } else {
+                let newTask = {
+                    id: Date.now(),
+                    name: name,
+                    category: category,
+                    timeLeft: totalSeconds,
+                    points: taskPoints
+                };
+                tasks.unshift(newTask);
+                alert('Đã thêm nhiệm vụ mới cho Em Nấm thành công!');
+            }
+
+            localStorage.setItem('nam_tasks', JSON.stringify(tasks));
+            resetTaskForm();
+            renderTasks();
+        }
+
+        function editTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+            let task = tasks.find(t => t.id === id);
+            if (task) {
+                document.getElementById('editTaskId').value = task.id;
+                document.getElementById('taskName').value = task.name;
+                document.getElementById('taskCategory').value = task.category;
+                document.getElementById('taskPointsInput').value = task.points || 5;
+                
+                let totalSecs = task.timeLeft > 0 ? task.timeLeft : 0;
+                let h = Math.floor(totalSecs / 3600);
+                let m = Math.floor((totalSecs % 3600) / 60);
+
+                document.getElementById('taskHours').value = h;
+                document.getElementById('taskMinutes').value = m;
+
+                document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-pen-to-square mr-1"></i> Chỉnh sửa nhiệm vụ`;
+                document.getElementById('submitTaskBtn').innerText = "Cập nhật";
+                document.getElementById('cancelEditBtn').classList.remove('hidden');
+                window.scrollTo({ top: 300, behavior: 'smooth' });
+            }
+        }
+
+        function deleteTask(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa nhiệm vụ này không?')) {
+                let tasks = JSON.parse(localStorage.getItem('nam_tasks')) || [];
+                tasks = tasks.filter(t => t.id !== id);
+                localStorage.setItem('nam_tasks', JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function resetTaskForm() {
+            document.getElementById('taskForm').reset();
+            document.getElementById('editTaskId').value = '';
+            document.getElementById('taskHours').value = 0;
+            document.getElementById('taskMinutes').value = 5;
+            document.getElementById('taskPointsInput').value = 5;
+            document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-plus-circle mr-1"></i> Thêm nhiệm vụ mới cho Em Nấm`;
+            document.getElementById('submitTaskBtn').innerText = "Thêm NV";
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+        }
+
+        // --- PHÂN QUYỀN & BẢO MẬT ---
+        function toggleAdminMode() {
+            if (!isAdminMode) {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('loginError').classList.add('hidden');
+            } else {
+                isAdminMode = false;
+                document.getElementById('adminSection').classList.add('hidden');
+                document.getElementById('modeBtn').className = "bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-md shadow-indigo-200 flex items-center space-x-1.5";
+                document.getElementById('modeText').innerText = "Chế độ: Em Nấm";
+                renderTasks();
+            }
+        }
+
+        function verifyAdminPassword() {
+            let passInput = document.getElementById('adminPasswordInput').value;
+            let storedPass = localStorage.getItem('nam_admin_pass') || '123456';
+
+            if (passInput === storedPass) {
+                isAdminMode = true;
+                document.getElementById('adminLoginModal').classList.add('hidden');
+                document.getElementById('adminSection').classList.remove('hidden');
+                document.getElementById('modeBtn').className = "bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-md shadow-indigo-200 flex items-center space-x-1.5";
+                document.getElementById('modeText').innerText = "Chế độ: Quản lý 🛡️";
+                renderPendingReports();
+                renderApprovedHistory();
+                renderTasks();
+            } else {
+                document.getElementById('loginError').classList.add('hidden');
+            }
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        }
+
+        function openPasswordModal() {
+            document.getElementById('newPassword').value = '';
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+        }
+
+        function saveNewPassword() {
+            let newPass = document.getElementById('newPassword').value;
+            if (!newPass) {
+                alert('Vui lòng nhập mật khẩu mới!');
+                return;
+            }
+            localStorage.setItem('nam_admin_pass', newPass);
+            closePasswordModal();
+            alert('Đổi mật khẩu quản lý thành công!');
+        }
+    </script>
+</body>
+</html>
